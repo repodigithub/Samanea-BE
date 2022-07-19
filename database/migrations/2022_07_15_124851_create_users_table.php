@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('supervisor')->nullable();
             $table->index(['team_leader', 'supervisor']);
             $table->enum('level',['sales', 'team_leader', 'supervisor', 'manager']);
-            $table->enum('status',['rejected', 'approved'])->default('rejected');
+            $table->enum('status',['approved', 'wait_approval', 'rejected'])->default('wait_approval');
             $table->timestamps();
         });
     }

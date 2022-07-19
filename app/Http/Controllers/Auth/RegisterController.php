@@ -49,18 +49,14 @@ class RegisterController extends Controller
             return $this->errorResponse('null', $validator->errors(), 422);
         }
 
-        $supervisor = User::whereLevel('supervisor')->first();
-        $team_leader = User::whereLevel('team_leader')->first();
-
         $user = User::create([
             'fullname' => $request->get('fullname'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
             'telphone' => $request->get('telphone'),
             'level' => $request->get('level'), 
-            'status' => 'rejected',
-            'team_leader' => $team_leader->id,
-            'supervisor' => $supervisor->id,
+            'team_leader' => $request->get('team_leader'),
+            'supervisor' => $request->get('supervisor'),
         ]);
         return $this->successResponse($user, 'Successfully Registered');
     }  

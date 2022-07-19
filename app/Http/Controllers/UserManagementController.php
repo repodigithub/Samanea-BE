@@ -31,7 +31,7 @@ class UserManagementController extends Controller
     public function userRequest()
     {
         try {
-            $user = User::orderBy('id', 'DESC')->get();
+            $user = User::whereStatus('wait_approval')->orderBy('id', 'DESC')->get();
             return $this->successResponse(UserResource::collection($user), 'List User Request Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
@@ -44,7 +44,7 @@ class UserManagementController extends Controller
         if (!$user) {
             return $this->errorResponse('null', 'User Not Found', 404 );
         } else {
-            $user->where('status', 'rejected')->update(['status' => 'approved']);
+            $user->update(['status' => 'approved']);
             return $this->successResponse($user, 'User approved successfully');
         }
     }
@@ -55,7 +55,7 @@ class UserManagementController extends Controller
         if (!$user) {
             return $this->errorResponse('null', 'User Not Found', 404 );
         } else {
-            $user->where('status', 'approved')->update(['status' => 'rejected']);
+            $user->update(['status' => 'rejected']);
             return $this->successResponse($user, 'User rejected successfully');
         }
     }
