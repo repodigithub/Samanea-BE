@@ -63,7 +63,6 @@ $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't ha
 
 $app->configure('app');
 $app->configure('jwt');
-$app->configure('permission');
 
 
 /*
@@ -88,10 +87,9 @@ $app->configure('permission');
 $app->routeMiddleware([
     'auth'       => App\Http\Middleware\Authenticate::class,
     'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
-    'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
-    'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
-    'permission' => Spatie\Permission\Middlewares\PermissionMiddleware::class,
-    'role'       => Spatie\Permission\Middlewares\RoleMiddleware::class,
+    'jwt.auth'   => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
+    'jwt.refresh'=> 'Tymon\JWTAuth\Middleware\RefreshToken',
+    'cors'       => App\Http\Middleware\CorsMiddleware::class,
 ]);
 
 /*
@@ -109,8 +107,6 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-$app->register(Spatie\Permission\PermissionServiceProvider::class);
-$app->register( App\Providers\RecaptchaValidatorServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\UserCollection;
 
 class UserManagementController extends Controller
 {
@@ -22,37 +21,42 @@ class UserManagementController extends Controller
     public function index()
     {
         try {
-            $user = User::orderBy('id', 'DESC')->get();
-            return $this->successResponse(new UserCollection($user), 'List User Management');
+            $user = User::whereStatus('approved')->orderBy('id', 'DESC')->get();
+            return $this->successResponse(UserResource::collection($user), 'List User Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
         }
     }
 
-    public function approved(Request $request, $id)
-    {   
-        $user = User::findOrFail($id);
-        try {
-            if($user) {
-                $user->where('status',0)->update(['status' => 1]);
-            }
-            return $this->successResponse($user, 'User approved successfully');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
-        }
-    }
-
-    public function rejected(Request $request, $id)
+    public function userRequest()
     {
-        $user = User::findOrFail($id);
         try {
-            if($user) {
-                $user->where('status',1)->update(['status' => 0]);
-            }
-            return $this->successResponse($user, 'User rejected successfully');
+            $user = User::orderBy('id', 'DESC')->get();
+            return $this->successResponse(UserResource::collection($user), 'List User Request Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
         }
     }
 
+    public function approved($id)
+    {   
+        $user = User::find($id);
+        if (!$user) {
+            return $this->errorResponse('null', 'User Not Found', 404 );
+        } else {
+            $user->where('status', 'rejected')->update(['status' => 'approved']);
+            return $this->successResponse($user, 'User approved successfully');
+        }
+    }
+
+    public function rejected($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return $this->errorResponse('null', 'User Not Found', 404 );
+        } else {
+            $user->where('status', 'approved')->update(['status' => 'rejected']);
+            return $this->successResponse($user, 'User rejected successfully');
+        }
+    }
 }

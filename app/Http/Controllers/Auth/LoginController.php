@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 use App\Traits\Response;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
@@ -21,11 +22,12 @@ class LoginController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'refresh']]);
     }
 
-    public function login(Request $request)
+    public function login(Request $request,  Recaptcha $recaptcha)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'g-recaptcha-response' => ['required', $recaptcha],
         ]);
         // function to display an error message
         if ($validator->fails()) {
@@ -35,7 +37,7 @@ class LoginController extends Controller
         $credentials = [
             'email' => $request->input('email'),
             'password' => $request->input('password'),
-            'status' => 1
+            'status' => 'approved'
         ];
          //Create token
         try {

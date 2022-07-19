@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +12,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
-    use Authenticatable, Authorizable, HasFactory, HasRoles;
+    use Authenticatable, Authorizable, HasFactory;
     protected $table = "users";
     /**
      * The attributes that are mass assignable.
@@ -21,7 +20,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string[]
      */
     protected $fillable = [
-        'fullname', 'email', 'password', 'telphone', 'level'
+        'fullname', 'email', 'password', 'telphone', 'level', 'status', 'team_leader', 'supervisor'
     ];
 
     /**

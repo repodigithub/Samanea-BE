@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Traits\Response;
-use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,10 +19,22 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['register']]);
+        $this->middleware('auth:api', ['except' => ['register', 'teamLeader', 'supervisor']]);
     }
 
-    public function register(Request $request, Recaptcha $recaptcha)
+    public function teamLeader()
+    {
+        $team_leader = User::whereLevel('team_leader')->get();
+        return $this->successResponse(UserResource::collection($team_leader), 'List Team Leader');
+    }
+
+    public function supervisor()
+    {
+        $supervisor = User::whereLevel('supervisor')->get();
+        return $this->successResponse(UserResource::collection($supervisor), 'List Supervisor');
+    }
+
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|min:6|max:255',
@@ -30,11 +42,15 @@ class RegisterController extends Controller
             'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             'telphone' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'min:11'],
             'level' => 'required',
-            'recaptcha' => ['required', $recaptcha],
+            'team_leader' => 'nullable',
+            'supervisor' => 'nullable',
         ]);
         if($validator->fails()) {
             return $this->errorResponse('null', $validator->errors(), 422);
         }
+
+        $supervisor = User::whereLevel('supervisor')->first();
+        $team_leader = User::whereLevel('team_leader')->first();
 
         $user = User::create([
             'fullname' => $request->get('fullname'),
@@ -42,6 +58,9 @@ class RegisterController extends Controller
             'password' => Hash::make($request->get('password')),
             'telphone' => $request->get('telphone'),
             'level' => $request->get('level'), 
+            'status' => 'rejected',
+            'team_leader' => $team_leader->id,
+            'supervisor' => $supervisor->id,
         ]);
         return $this->successResponse($user, 'Successfully Registered');
     }  

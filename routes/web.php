@@ -14,25 +14,18 @@
 |
 */
 
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
-$router->group(['prefix' => 'api/auth'], function () use ($router) {
+$router->group(['prefix' => 'api/auth', 'middleware' => ['cors']], function () use ($router) {
     $router->post("register","Auth\RegisterController@register");
+    $router->get("register/teamleader","Auth\RegisterController@teamLeader");
+    $router->get("register/supervisor","Auth\RegisterController@supervisor");
     $router->post("login","Auth\LoginController@login");
 });
 
-$router->group(['prefix' => 'api', 'middleware' => ['jwt.verify']], function () use ($router){
+$router->group(['prefix' => 'api', 'middleware' => ['cors','jwt.verify']], function () use ($router){
     $router->post("logout","Auth\LogoutController@logout");
-    $router->group(['prefix' => 'role'], function () use ($router) {
-        $router->get('/', "RoleController@index");
-        $router->post('/', "RoleController@store");
-        $router->get('/{id}', "RoleController@show");
-        $router->put('/{id}', "RoleController@update");
-        $router->delete('/{id}', 'RoleController@destroy');
-    });
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->get('/', "UserManagementController@index");
+        $router->get('/request', "UserManagementController@userRequest");
         $router->post('/approved/{id}', "UserManagementController@approved");
         $router->post('/rejected/{id}', "UserManagementController@rejected");
     });

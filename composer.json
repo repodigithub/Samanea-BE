@@ -6,10 +6,8 @@
     "type": "project",
     "require": {
         "php": "^8.0",
-        "google/recaptcha": "1.2",
         "kitetail/zttp": "^0.6.0",
         "laravel/lumen-framework": "^9.0",
-        "spatie/laravel-permission": "^5.5",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

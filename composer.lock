@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a44a887bad8b965ff4e2401bf68d005",
+    "content-hash": "e930b0e91718ad4d71c32f40f2891498",
     "packages": [
         {
             "name": "brick/math",
@@ -432,58 +432,6 @@
                 }
             ],
             "time": "2022-02-20T15:07:15+00:00"
-        },
-        {
-            "name": "google/recaptcha",
-            "version": "1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/google/recaptcha.git",
-                "reference": "3875d025d0465f36f32452f614e7ffc1462c889f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/google/recaptcha/zipball/3875d025d0465f36f32452f614e7ffc1462c889f",
-                "reference": "3875d025d0465f36f32452f614e7ffc1462c889f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.2.20|^2.12",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^4.8.36|^5.7.27|^6.59|^7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ReCaptcha\\": "src/ReCaptcha"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Client library for reCAPTCHA, a free service that protects websites from spam and abuse.",
-            "homepage": "https://www.google.com/recaptcha/",
-            "keywords": [
-                "Abuse",
-                "captcha",
-                "recaptcha",
-                "spam"
-            ],
-            "support": {
-                "forum": "https://groups.google.com/forum/#!forum/recaptcha",
-                "issues": "https://github.com/google/recaptcha/issues",
-                "source": "https://github.com/google/recaptcha"
-            },
-            "time": "2018-08-01T11:58:31+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -2610,41 +2558,43 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "4.1.5",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582"
+                "reference": "55564265fddf810504110bd68ca311932324b0e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/fe2d89f2eaa7087af4aa166c6f480ef04e000582",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/55564265fddf810504110bd68ca311932324b0e9",
+                "reference": "55564265fddf810504110bd68ca311932324b0e9",
                 "shasum": ""
             },
             "require": {
-                "ext-hash": "*",
-                "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "ext-sodium": "*",
                 "lcobucci/clock": "^2.0",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "infection/infection": "^0.21",
+                "infection/infection": "^0.20",
                 "lcobucci/coding-standard": "^6.0",
-                "mikey179/vfsstream": "^1.6.7",
-                "phpbench/phpbench": "^1.0",
+                "mikey179/vfsstream": "^1.6",
+                "phpbench/phpbench": "^0.17",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-deprecation-rules": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/php-invoker": "^3.1",
-                "phpunit/phpunit": "^9.5"
+                "phpunit/phpunit": "^9.4"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
@@ -2668,7 +2618,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.1.5"
+                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
             },
             "funding": [
                 {
@@ -2680,7 +2630,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-28T19:34:56+00:00"
+            "time": "2021-09-28T19:18:28+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3549,88 +3499,6 @@
                 }
             ],
             "time": "2022-03-27T21:42:02+00:00"
-        },
-        {
-            "name": "spatie/laravel-permission",
-            "version": "5.5.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "f2303a70be60919811ca8afc313e8244fda00974"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/f2303a70be60919811ca8afc313e8244fda00974",
-                "reference": "f2303a70be60919811ca8afc313e8244fda00974",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/auth": "^7.0|^8.0|^9.0",
-                "illuminate/container": "^7.0|^8.0|^9.0",
-                "illuminate/contracts": "^7.0|^8.0|^9.0",
-                "illuminate/database": "^7.0|^8.0|^9.0",
-                "php": "^7.3|^8.0|^8.1"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^5.0|^6.0|^7.0",
-                "phpunit/phpunit": "^9.4",
-                "predis/predis": "^1.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Spatie\\Permission\\PermissionServiceProvider"
-                    ]
-                },
-                "branch-alias": {
-                    "dev-main": "5.x-dev",
-                    "dev-master": "5.x-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Spatie\\Permission\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Permission handling for Laravel 6.0 and up",
-            "homepage": "https://github.com/spatie/laravel-permission",
-            "keywords": [
-                "acl",
-                "laravel",
-                "permission",
-                "permissions",
-                "rbac",
-                "roles",
-                "security",
-                "spatie"
-            ],
-            "support": {
-                "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/5.5.5"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/spatie",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-06-29T23:11:42+00:00"
         },
         {
             "name": "stella-maris/clock",

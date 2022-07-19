@@ -16,11 +16,14 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
-            $table->string('email')->unique()->notNullable();
-            $table->string('telphone');
+            $table->string('email')->unique();
             $table->string('password');
-            $table->enum('level', ['sales', 'team_leader', 'supervisor', 'manager']);
-            $table->integer('status')->default(0)->nullable();
+            $table->string('telphone');
+            $table->string('team_leader')->nullable();
+            $table->string('supervisor')->nullable();
+            $table->index(['team_leader', 'supervisor']);
+            $table->enum('level',['sales', 'team_leader', 'supervisor', 'manager']);
+            $table->enum('status',['rejected', 'approved'])->default('rejected');
             $table->timestamps();
         });
     }
