@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 use App\Traits\Response;
-use App\Rules\Recaptcha;  
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
@@ -14,6 +13,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class LoginController extends Controller
 {
     use Response;
+
+    // const url recaptcha
     const RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify";
     /**
     * Create a new controller instance.
@@ -30,14 +31,14 @@ class LoginController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-            "g-recaptcha-response" => 'required'
+            // "g-recaptcha-response" => 'required'
         ]);
         // function to display an error message
         if ($validator->fails()) {
             return $this->errorResponse('null', $validator->errors(), 422);
         }
         
-        $this->verifyCaptcha($request->input("g-recaptcha-response"));
+        // $this->verifyCaptcha($request->input("g-recaptcha-response"));
         
         $credentials = [
             'email' => $request->input('email'),
@@ -57,6 +58,7 @@ class LoginController extends Controller
         
     }  
     
+    // function cek verifyCaptcha
     private function verifyCaptcha($grecaptcha) 
     { 
         $response = Http::asForm()->post(self::RECAPTCHA_URL, [ 
