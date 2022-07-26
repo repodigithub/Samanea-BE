@@ -31,8 +31,7 @@ $router->group(['prefix' => 'api', 'middleware' => ['cors','jwt.verify']], funct
         $router->post('/', "UserManagementController@store");
         $router->put('/{id}', "UserManagementController@update");
         $router->delete('/{id}', "UserManagementController@destroy");
-        $router->post('/approved/{id}', "UserManagementController@approved");
-        $router->post('/rejected/{id}', "UserManagementController@rejected");
+        $router->post('/action', "UserManagementController@action");
     });
     $router->group(['prefix' => 'targetsales'], function () use ($router) {
         $router->get('/', "TargetSalesController@index");

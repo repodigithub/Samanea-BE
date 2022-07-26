@@ -20,7 +20,7 @@ class UserManagementController extends Controller
     {
         $this->user = JWTAuth::parseToken()->authenticate();
     }
-
+    
     /**
     * Display a listing of the resource.
     *
@@ -155,25 +155,28 @@ class UserManagementController extends Controller
         }
     }
     
-    public function approved($id)
-    {   
-        $user = User::find($id);
-        if (!$user) {
-            return $this->errorResponse('null', 'User Not Found', 404 );
-        } else {
-            $user->update(['status' => 'approved']);
-            return $this->successResponse(new UserResource($user), 'User approved successfully');
-        }
-    }
-    
-    public function rejected($id)
+    public function action(Request $request)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return $this->errorResponse('null', 'User Not Found', 404 );
-        } else {
-            $user->update(['status' => 'rejected']);
-            return $this->successResponse(new UserResource($user), 'User rejected successfully');
+         //Validate data
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|array',
+            'status' => 'required|in:approved,rejected',
+        ]);
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            return $this->errorResponse('null', $validator->errors(), 422);
         }
+        
+        $users = [];
+        foreach ($request->input('id') as $id) {
+            $users[] = User::find($id);
+        }
+        // update data array
+        $user = User::whereIn('id', $request->input('id'))->update([
+            'status' => $request->input('status')
+        ]);
+        
+        return $this->successResponse($user, 'User Action successfully');
     }
 }
+                        
