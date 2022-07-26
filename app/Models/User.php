@@ -42,4 +42,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return [];
     }
 
+    public function scopeFilterByName($query) {
+        if(request('search') ?? false) {
+            $query->where('fullname', 'like', "%" . request('search') . "%");
+        }
+    }
+
 }

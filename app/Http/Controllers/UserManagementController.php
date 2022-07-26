@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 
 class UserManagementController extends Controller
@@ -21,40 +22,40 @@ class UserManagementController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function index()
     {
         try {
-            $user = User::whereStatus('approved')->orderBy('id', 'DESC')->get();
+            $user = User::whereStatus('approved')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(15);
             return $this->successResponse(UserResource::collection($user), 'List User Management');
         } catch (\Illuminate\Database\QueryException $e) {
-            return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
+            return $this->errorResponse('null', 'Failed'. $e->getMessage(), 422 );
         }
     }
-
+    
     /**
-     * Displays a list of resources by wait approval status.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    * Displays a list of resources by wait approval status.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function userRequest()
     {
         try {
-            $user = User::whereStatus('wait_approval')->orderBy('id', 'DESC')->get();
+            $user = User::whereStatus('wait_approval')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(15);
             return $this->successResponse(UserResource::collection($user), 'List User Request Management');
         } catch (\Illuminate\Database\QueryException $e) {
-            return $this->errorResponse('null', 'Failed'. $e->getInfo, 422 );
+            return $this->errorResponse('null', 'Failed'. $e->getMessage(), 422 );
         }
     }
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    * Display the specified resource.
+    *
+    * @param  \App\Models\User  $user
+    * @return \Illuminate\Http\Response
+    */
     public function show($id)
     {
         $user = User::find($id);
@@ -64,20 +65,20 @@ class UserManagementController extends Controller
             return $this->successResponse(new UserResource($user), 'Show User Management');
         }
     }
-
+    
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    * Store a newly created resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function store(Request $request)
     {
         //Validate data
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|min:6|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'password' => 'required|confirmed|min:8',
             'telphone' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'min:11'],
             'level' => 'required',
         ]);
@@ -93,20 +94,20 @@ class UserManagementController extends Controller
             'telphone' => $request->get('telphone'),
             'level' => $request->get('level'), 
         ]);
-         //user store, return success response
+        //user store, return success response
         return $this->successResponse(new UserResource($user), 'User created successfully');
     }
-
+    
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \App\Models\User  $user
+    * @return \Illuminate\Http\Response
+    */
     public function update(Request $request, $id)
     {
-         // check id is there or not 
+        // check id is there or not 
         $user = User::find($id);
         if(!$user) {
             return $this->errorResponse(null, 'User not found', 404);
@@ -115,7 +116,7 @@ class UserManagementController extends Controller
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|min:6|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'password' => 'required|confirmed|min:8',
             'telphone' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'min:11'],
             'level' => 'required',
         ]);
@@ -123,7 +124,7 @@ class UserManagementController extends Controller
         if ($validator->fails()) {
             return $this->errorResponse('null', $validator->errors(), 422);
         }
-
+        
         //Request is valid, update user
         $user->update([
             'fullname' => $request->get('fullname'),
@@ -132,17 +133,17 @@ class UserManagementController extends Controller
             'telphone' => $request->get('telphone'),
             'level' => $request->get('level'), 
         ]);
-
+        
         //user updated, return success response
         return $this->successResponse(new UserResource($user), 'User updated successfully');
     }
-
+    
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+    * Remove the specified resource from storage.
+    *
+    * @param  \App\Models\User  $user
+    * @return \Illuminate\Http\Response
+    */
     public function destroy($id)
     {
         $user = User::find($id);
@@ -153,7 +154,7 @@ class UserManagementController extends Controller
             return $this->successResponse(new UserResource($user), 'User deleted successfully');
         }
     }
-
+    
     public function approved($id)
     {   
         $user = User::find($id);
@@ -164,7 +165,7 @@ class UserManagementController extends Controller
             return $this->successResponse(new UserResource($user), 'User approved successfully');
         }
     }
-
+    
     public function rejected($id)
     {
         $user = User::find($id);

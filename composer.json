@@ -8,6 +8,7 @@
         "php": "^8.0",
         "kitetail/zttp": "^0.6.0",
         "laravel/lumen-framework": "^9.0",
+        "league/flysystem": "*",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

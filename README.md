@@ -24,4 +24,6 @@ Documentation is still on progress. For now, you can fork this postman collectio
  `php artisan db:seed`
  8. Create jwt key\
  `php artisan jwt:secret`
+ ## Serve
+ `php -S localhost:8000 -t public`
  

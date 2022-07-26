@@ -39,7 +39,7 @@ class RegisterController extends Controller
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|min:6|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'password' => 'required|confirmed|min:8',
             'telphone' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'min:11'],
             'level' => 'required',
             'team_leader' => 'nullable',
@@ -55,6 +55,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->get('password')),
             'telphone' => $request->get('telphone'),
             'level' => $request->get('level'), 
+            'status' => $request->get('level') == 'manager' ? 'approved' : 'wait_approval',
             'team_leader' => $request->get('team_leader'),
             'supervisor' => $request->get('supervisor'),
         ]);
