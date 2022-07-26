@@ -24,14 +24,14 @@ class RegisterController extends Controller
 
     public function teamLeader()
     {
-        $team_leader = User::whereLevel('team_leader')->get();
-        return $this->successResponse(UserResource::collection($team_leader), 'List Team Leader');
+        $team_leader = User::whereLevel('team_leader')->filterByName(request('search'))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
+        return $this->successResponse($team_leader, 'List Team Leader');
     }
 
     public function supervisor()
     {
-        $supervisor = User::whereLevel('supervisor')->get();
-        return $this->successResponse(UserResource::collection($supervisor), 'List Supervisor');
+        $supervisor = User::whereLevel('supervisor')->filterByName(request('search'))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
+        return $this->successResponse($supervisor, 'List Supervisor');
     }
 
     public function register(Request $request)
