@@ -160,7 +160,7 @@ class UserManagementController extends Controller
          //Validate data
         $validator = Validator::make($request->all(), [
             'id' => 'required|array',
-            'status' => 'required|in:approved,rejected',
+            // 'status' => 'required|in:approved,rejected',
         ]);
         //Send failed response if request is not valid
         if ($validator->fails()) {
@@ -171,11 +171,10 @@ class UserManagementController extends Controller
         foreach ($request->input('id') as $id) {
             $users[] = User::find($id);
         }
-        // update data array
+        // update data multi rows
         $user = User::whereIn('id', $request->input('id'))->update([
             'status' => $request->input('status')
         ]);
-        
         return $this->successResponse($user, 'User Action successfully');
     }
 }

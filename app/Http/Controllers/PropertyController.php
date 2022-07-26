@@ -147,6 +147,7 @@ class PropertyController extends Controller
                 $data[] = $name;  
             }
         }
+        Storage::disk('local')->delete('assets/sliders/'. basename($property->slider));
             
         $foto_overview = $this->uploadImage($request, 'public/overview/', 'foto_overview');
         $icon = $this->uploadImage($request, 'public/icon/', 'icon');
@@ -208,6 +209,28 @@ class PropertyController extends Controller
         } catch (Exception $e) {
             DB::rollback();
             return $this->errorResponse('null', 'There is something wrong'. $e->getMessage(), 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $property = Property::find($id);
+        if(!$property) {
+            return $this->errorResponse(null, 'Property not found', 404);
+        } else {
+            //delete image old
+            Storage::delete('assets/sliders/'.$property->slider);
+            Storage::disk('local')->delete('public/overview/'. basename($property->foto_overview));
+            Storage::disk('local')->delete('public/icon/'. basename($property->icon));
+            Storage::disk('local')->delete('public/arsitek/'. basename($property->foto_arsitek));
+            Storage::disk('local')->delete('public/masterplan/'. basename($property->foto_masterplan));
+            Storage::disk('local')->delete('public/fasilitas/'. basename($property->foto_fasilitas));
+            Storage::disk('local')->delete('public/unit/'. basename($property->foto_unit));
+            Storage::disk('local')->delete('public/galery_unit/'. basename($property->galery_unit));
+            Storage::disk('local')->delete('public/footer/'. basename($property->foto_footer));
+            // delete property
+            $property->delete();
+            return $this->successResponse(new PropertyResource($property), 'Property successfully deleted');
         }
     }
 
