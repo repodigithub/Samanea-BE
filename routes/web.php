@@ -14,7 +14,7 @@
 |
 */
 
-$router->group(['prefix' => 'api/auth', 'middleware' => ['cors']], function () use ($router) {
+$router->group(['prefix' => 'api/auth'], function () use ($router) {
     $router->post("register","Auth\RegisterController@register");
     $router->get("register/teamleader","Auth\RegisterController@teamLeader");
     $router->get("register/supervisor","Auth\RegisterController@supervisor");
@@ -22,7 +22,7 @@ $router->group(['prefix' => 'api/auth', 'middleware' => ['cors']], function () u
 });
 
 
-$router->group(['prefix' => 'api', 'middleware' => ['cors','jwt.verify']], function () use ($router){
+$router->group(['prefix' => 'api', 'middleware' => ['jwt.verify']], function () use ($router){
     $router->post("logout","Auth\LogoutController@logout");
     $router->group(['prefix' => 'user'], function () use ($router) {
         $router->get('/', "UserManagementController@index");

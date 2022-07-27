@@ -29,8 +29,8 @@ class UserManagementController extends Controller
     public function index()
     {
         try {
-            $user = User::whereStatus('approved')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(15);
-            return $this->successResponse(UserResource::collection($user), 'List User Management');
+            $user = User::whereStatus('approved')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
+            return $this->successResponse($user, 'List User Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getMessage(), 422 );
         }
@@ -44,8 +44,8 @@ class UserManagementController extends Controller
     public function userRequest()
     {
         try {
-            $user = User::whereStatus('wait_approval')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(15);
-            return $this->successResponse(UserResource::collection($user), 'List User Request Management');
+            $user = User::whereStatus('wait_approval')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
+            return $this->successResponse($user, 'List User Request Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getMessage(), 422 );
         }
@@ -81,6 +81,8 @@ class UserManagementController extends Controller
             'password' => 'required|confirmed|min:8',
             'telphone' => ['required', 'regex:/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/', 'min:11'],
             'level' => 'required',
+            'team_leader' => 'nullable',
+            'supervisor' => 'nullable',
         ]);
         //Send failed response if request is not valid
         if($validator->fails()) {
@@ -92,7 +94,10 @@ class UserManagementController extends Controller
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
             'telphone' => $request->get('telphone'),
-            'level' => $request->get('level'), 
+            'level' => $request->get('level'),
+            'status' => $request->get('level') == 'manager' ? 'approved' : 'wait_approval',
+            'team_leader' => $request->get('team_leader'),
+            'supervisor' => $request->get('supervisor'), 
         ]);
         //user store, return success response
         return $this->successResponse(new UserResource($user), 'User created successfully');
@@ -131,7 +136,9 @@ class UserManagementController extends Controller
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
             'telphone' => $request->get('telphone'),
-            'level' => $request->get('level'), 
+            'level' => $request->get('level'),
+            'team_leader' => $request->get('team_leader'),
+            'supervisor' => $request->get('supervisor'), 
         ]);
         
         //user updated, return success response

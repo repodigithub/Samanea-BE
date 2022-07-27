@@ -84,12 +84,14 @@ $app->configure('jwt');
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class,
+]);
 $app->routeMiddleware([
     'auth'       => App\Http\Middleware\Authenticate::class,
     'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
     'jwt.auth'   => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
     'jwt.refresh'=> 'Tymon\JWTAuth\Middleware\RefreshToken',
-    'cors'       => App\Http\Middleware\CorsMiddleware::class,
 ]);
 
 /*
