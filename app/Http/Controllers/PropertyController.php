@@ -29,7 +29,7 @@ class PropertyController extends Controller
 
     public function index()
     {
-        $property = Property::latest()->paginate(15);
+        $property = Property::latest()->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
         return $this->successResponse(PropertyResource::collection($property), 'List Property');
     }
 

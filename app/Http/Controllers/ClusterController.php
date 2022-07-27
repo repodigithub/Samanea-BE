@@ -22,7 +22,7 @@ class ClusterController extends Controller
 
     public function index()
     {
-        $cluster = Cluster::latest()->paginate(15);
+        $cluster = Cluster::latest()->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
         return $this->successResponse(ClusterResource::collection($cluster), 'List Cluster Property');
     }
 
