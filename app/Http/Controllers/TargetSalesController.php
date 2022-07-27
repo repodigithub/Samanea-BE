@@ -27,7 +27,7 @@ class TargetSalesController extends Controller
     public function index(Request $request)
     {
         $targetSales = TargetSales::latest()->filter(request(['from', 'to']))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
-        return $this->successResponse(TargetSalesResource::collection($targetSales), 'List Target Sales Management');
+        return $this->successResponse($targetSales, 'List Target Sales Management');
     }
     
     public function show($id)
