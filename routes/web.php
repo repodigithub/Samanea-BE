@@ -19,6 +19,7 @@ $router->group(['prefix' => 'api/auth'], function () use ($router) {
     $router->get("register/teamleader","Auth\RegisterController@teamLeader");
     $router->get("register/supervisor","Auth\RegisterController@supervisor");
     $router->post("login","Auth\LoginController@login");
+    $router->get("register/supervisor/{id}","Auth\RegisterController@getSupervisor");
 });
 
 

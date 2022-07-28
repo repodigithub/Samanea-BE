@@ -60,5 +60,15 @@ class RegisterController extends Controller
             'supervisor' => $request->get('supervisor'),
         ]);
         return $this->successResponse($user, 'Successfully Registered');
-    }  
+    }
+    
+    public function getSupervisor($id)
+    {
+        $user = User::find($id);
+        if(!$user) {
+            return $this->errorResponse(null, 'User not found', 404);
+        } else {
+            return $this->successResponse(new UserResource($user), 'Show User Management');
+        }
+    }
 }
