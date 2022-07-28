@@ -8,7 +8,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Resources\UserCollection;
 use Illuminate\Support\Facades\Validator;
 
 class UserManagementController extends Controller
@@ -30,7 +30,7 @@ class UserManagementController extends Controller
     {
         try {
             $user = User::whereStatus('approved')->orderBy('id', 'DESC')->filterByName(request('search'))->paginate(request('limit') ?: 15,["*"], "page", request('page') ?: 1);
-            return $this->successResponse($user, 'List User Management');
+            return $this->successResponse(new UserCollection($user), 'List User Management');
         } catch (\Illuminate\Database\QueryException $e) {
             return $this->errorResponse('null', 'Failed'. $e->getMessage(), 422 );
         }
