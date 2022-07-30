@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Property;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Cluster extends Model 
+class Cluster extends Model
 {
     use HasFactory;
-    
-    protected $table = "cluster";
-    protected $guarded = ["id"];
 
-    public function property() {
-        return $this->hasMany(Property::class);
+    protected $table = "cluster";
+    protected $guarded = [];
+
+    public function unit()
+    {
+        return $this->hasMany(Unit::class);
     }
 }

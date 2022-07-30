@@ -2,14 +2,16 @@
 
 namespace App\Traits;
 
-trait Upload 
+trait Upload
 {
     public function uploadImage($request, $path, $inputName)
     {
         $image = null;
-        if($request->file($inputName)){
+        if ($request->file($inputName)) {
             $image = $request->file($inputName);
-            $image->storeAs($path, $image->hashName());
+            $name = str_replace(' ', '_', $image->getClientOriginalName());
+            $image->move(storage_path('/app/public/' . $path), $name);
+            $image = "/storage/${path}/{$name}";
         }
         return $image;
     }

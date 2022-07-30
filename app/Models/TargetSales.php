@@ -6,11 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TargetSales extends Model 
+class TargetSales extends Model
 {
     use HasFactory;
-    
+
     protected $table = "target_sales";
+
+    const STATUS_ON_PROGRESS  = 'on_progress';
+    const STATUS_SUCCESS = 'success';
+    const STATUS_FAIL = 'fail';
     /**
      * The attributes that are mass assignable.
      *
@@ -20,20 +24,24 @@ class TargetSales extends Model
         'target', 'tanggal_awal', 'tanggal_akhir', 'pencapaian', 'status',
     ];
 
+    public $appends = ['status'];
+
+    public $hidden  = ['status'];
+
     public $dates = ['tanggal_awal', 'tanggal_akhir'];
 
-    public function scopeFilter($query, array $filters) {
-        if($filters['from'] ?? false) {
-            $query->where('tanggal_awal', '>=' , Carbon::parse(request('from') )->format('Y-m-d'));
+    public function scopeFilter($query, array $filters)
+    {
+        if ($filters['from'] ?? false) {
+            $query->where('tanggal_awal', '>=', Carbon::parse(request('from'))->format('Y-m-d'));
         }
-        if($filters['to'] ?? false) {
-            $query->where('tanggal_akhir', '<=' , Carbon::parse(request('to') )->format('Y-m-d'));
+        if ($filters['to'] ?? false) {
+            $query->where('tanggal_akhir', '<=', Carbon::parse(request('to'))->format('Y-m-d'));
         }
-        // $query->when($filters['from'] ?? false, function($query, $from){
-        //     $query->where('tanggal_awal', '>=' , Carbon::parse($from)->format('Y-m-d'));
-        // });
-        // $query->when($filters['to'] ?? false, function($query, $to){
-        //     $query->where('tanggal_akhir', '<=' , Carbon::parse($to)->format('Y-m-d'));
-        // });
+    }
+
+    public function getStatusClaimAttribute()
+    {
+        return !empty($this->pencapaian) ? self::STATUS_ON_PROGRESS : self::STATUS_SUCCESS;
     }
 }
